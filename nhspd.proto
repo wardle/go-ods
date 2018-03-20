@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package ods;
+
+// NHSPD is the NHS postcode directory
+// See https://isd.digital.nhs.uk/trud3/user/authenticated/group/0/pack/5/subpack/242/releases
+//
+// TODO(wardle): check representation of OS grid references; switch from string to signed int64?
+message NHSPD {
+
+    // Postcode user type
+    enum UserType {
+        SMALL = 0;                      // a small user
+        LARGE = 1;                      // a large user
+    }
+
+    // Grid reference positional quality indicator
+    enum GridReferenceQuality {
+        UNKNOWN_GRID_REF_QUALITY = 0;
+        WITHIN_BUILDING = 1;            // within the building of the matched address closest to the postcode mean;        
+        WITHIN_BUILDING_FROM_MAP = 2;   // as for status value 1, except by visual inspection of Landline maps (Scotland only);
+        WITHIN_50_METRES = 3;           // approximate to within 50 metres;
+        POSTCODE_UNIT_MEAN = 4;         // postcode unit mean (mean of matched addresses with the same postcode, but not snapped to a building);
+        IMPUTED_BY_ONS = 5;             // imputed by ONS, by reference to surrounding postcode grid references;
+        POSTCODE_SECTOR_MEAN = 6;       // postcode sector mean, (mainly PO Boxes);
+        TERMINATED_LAST_KNOWN = 8;      // postcode terminated prior to Gridlink® initiative, last known ONS postcode grid reference1;
+        NO_GRID_REFERENCE = 9;          // no grid reference available
+    }
+
+    // Census enumeration district positional quality indicator
+    enum CensusCodeQuality {
+        UNKNOWN_CENSUS_QUALITY = 0;
+        POINT_IN_POLYGON = 1;           // assigned by point-in-polygon technique;
+        NORTHERN_IRELAND = 6;
+        SCOTLAND_CHANNELISLANDS_ISLEOFMAN = 9;
+    }
+
+    string postcode = 1;                    // Unit postcode – 8 character version
+    string postcode_egif = 2;               // Unit postcode - variable length (e- Gif) version
+    string date_introduction = 3;           // Date of introduction - YYYYMM
+    string date_termination = 4;            // Date of termination - YYYYMM; null='live postcode'
+    string os_easting_100m = 5;             // National grid reference easting
+    string os_northing_100m = 6;            // National grid reference northing
+    string county = 7;                      // County
+    string local_authority_org = 8;         // Local authority organisation
+    string local_authority_district = 9;    // Local authority district
+    string electoral_ward = 10;             // Electoral ward
+    UserType user_type = 11;                // User type 
+    GridReferenceQuality grid_referene_quality = 12; // Grid reference positional quality indicator
+    string country = 13;                    // Country code
+    string health_authority_pre_2013 = 14;  // Former Strategic Health Authority (SHA)/ Local Health Board (LHB)/ Health Board (HB)/ Health Authority (HA)/ Health & Social Care Board (HSCB)
+    string region = 15;                     // The region code for each postcode. Pseudo codes are included for Wales, Scotland, Northern Ireland, Channel Island and Isle of Man. The field will otherwise be blank for postcodes in England with no grid reference.
+    string health_authority_pre_2002 = 16;  // The Health Authority existing prior to the reorganisation of health areas (England in 2002, Wales in 2003). The field will be blank for postcodes in England or Wales with no grid reference.
+    string nhs_england_region = 17;         // The NHS ER code for the postcode. Pseudo codes are included for Wales, Scotland, Northern Ireland, Channel Islands and Isle of Man. The field will be blank for postcodes in England with no grid reference.
+    string ccg_lhb_chp_lcg_phd = 18;        // The code for the CCG areas in England, LHBs in Wales, CHPs in Scotland, LCG in Northern Ireland and PHD in the Isle of Man; there are no equivalent areas in the Channel Islands (for which a pseudo code is included). The field will be blank for postcodes in England or Wales with no grid reference. (The former PCTs are now included in field 36 ‘PCT’).
+    string census_1991_ogss = 19;           // The code for the 1991 Census ED. A pseudo code is included for Scotland, Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string census_1991_code = 20;           // Same as above except a Census code is provided.
+    CensusCodeQuality census_code_quality = 21; // ED positional quality indicator
+    string ward_1998 = 22;                  // The 1998 administrative and electoral areas for each postcode. A pseudo code is included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string census_2001_area = 23;           // The 2001 Census OAs were built from unit postcodes and constrained to 2003 ‘statistical’ wards, and they formed the building bricks for defining higher level geographies. Pseudo codes are included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string nhs_england_rlo = 24;            // The NHS RLO (formerly NHS Region Geography, formerly Area Team)) code for the postcode. Pseudo codes are included for Wales, Scotland, Northern Ireland, Channel Islands and Isle of Man. The field will be blank for postcodes in England with no grid reference.
+    string former_pan_sha = 25;             // The former Pan SHA responsible for the associated strategic health authority for each postcode in England. Pseudo codes are included for Wales, Scotland, Northern Ireland, Channel Islands and Isle of Man. The field will be blank for postcodes in England with no grid reference.
+    string census_2001_lsoa = 26;           // The 2001 Census LSOA code for England and Wales, SOA code for Northern Ireland and DZ code for Scotland. Pseudo codes are included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string census_2001_rural = 27;          // The 2001 Census urban and rural classification of OAs for England and Wales, Scotland and Northern Ireland. A pseudo code is included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference. N.B. the code ranges 1-8 differ between England/Wales and Scotland – see paragraph 31 for details.
+    string census_2001_msoa = 28;           // The 2001 Census MSOA code for England and Wales and IZ code for Scotland. Pseudo codes are included for Northern Ireland, Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string former_cancer_network = 29;      // Former Cancer Network code
+    string strategic_clinical_network = 30; // The NHS SCN that each postcode falls within. Introduced in April 2013 by NHS England, former Cancer Network codes are included for Wales and Isle of Man. A pseudo code is included for Scotland, Northern Ireland and Channel Islands. The field will otherwise be blank for postcodes with no grid reference.
+    string health_authority_pre_2006 = 31;  // The health area code for the postcode prior to the NHS reorganisation on 1 July 2006. A pseudo code is included for Wales. The field will otherwise be blank for postcodes with no grid reference.
+    string pct_pre_2006 = 32;               // The pre-October 2006 code for the primary care areas in England and Wales; primary care areas do not exist in Scotland, Northern Ireland, Channel Islands or Isle of Man, to which a pseudo code has been assigned. The field will be blank for postcodes in England or Wales with no grid reference.
+    string it_cluster_pre_2007 = 33;        // The pre-Pan SHA ITC responsible for the associated SHA for each postcode in England. ITCs were used from 1 July 2003 to 31 March 2007. Pseudo codes are included for Scotland, Northern Ireland, Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string westminster_consituency = 34;    // The Westminster parliamentary constituency code for each postcode. Pseudo codes are included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string cancer_registry = 35;            // The cancer registry that each postcode falls within. A pseudo code is included for Scotland, Northern Ireland, Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string pct = 36;                        // The code for the PCT/CT areas (England), LHBs (Wales), CHPs (Scotland), LCG (Northern Ireland) or PHD (Isle of Man) prior to the abolition of PCTs in 2013 and CHPs in 2015; there are no equivalent areas in the Channel Islands (for which a pseudo code is included). The field will otherwise be blank for postcodes with no grid reference.
+    string os_easting_1m = 37;
+    string os_northing_1m = 38;
+    string census_2011_area = 39;           // The 2011 Census OAs in GB and SAs in Northern Ireland were based on 2001 Census OAs, and they form the building bricks for defining higher level geographies. Pseudo codes are included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
+    string census_2011_lsoa = 40;
+    string census_2011_msoa = 41;
+}
