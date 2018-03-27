@@ -1,11 +1,10 @@
 syntax = "proto3";
 
-package ods;
+package trud;
 
 // NHSPD is the NHS postcode directory
 // See https://isd.digital.nhs.uk/trud3/user/authenticated/group/0/pack/5/subpack/242/releases
 //
-// TODO(wardle): check representation of OS grid references; switch from string to signed int64?
 message NHSPD {
 
     // Postcode user type
@@ -46,7 +45,7 @@ message NHSPD {
     string local_authority_district = 9;    // Local authority district
     string electoral_ward = 10;             // Electoral ward
     UserType user_type = 11;                // User type 
-    GridReferenceQuality grid_referene_quality = 12; // Grid reference positional quality indicator
+    GridReferenceQuality grid_reference_quality = 12; // Grid reference positional quality indicator
     string country = 13;                    // Country code
     string health_authority_pre_2013 = 14;  // Former Strategic Health Authority (SHA)/ Local Health Board (LHB)/ Health Board (HB)/ Health Authority (HA)/ Health & Social Care Board (HSCB)
     string region = 15;                     // The region code for each postcode. Pseudo codes are included for Wales, Scotland, Northern Ireland, Channel Island and Isle of Man. The field will otherwise be blank for postcodes in England with no grid reference.
@@ -71,7 +70,7 @@ message NHSPD {
     string westminster_consituency = 34;    // The Westminster parliamentary constituency code for each postcode. Pseudo codes are included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
     string cancer_registry = 35;            // The cancer registry that each postcode falls within. A pseudo code is included for Scotland, Northern Ireland, Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
     string pct = 36;                        // The code for the PCT/CT areas (England), LHBs (Wales), CHPs (Scotland), LCG (Northern Ireland) or PHD (Isle of Man) prior to the abolition of PCTs in 2013 and CHPs in 2015; there are no equivalent areas in the Channel Islands (for which a pseudo code is included). The field will otherwise be blank for postcodes with no grid reference.
-    string os_easting_1m = 37;
+    string os_easting_1m = 37;              // Grid references represented as strings as may contain letters and leading zeros are significant
     string os_northing_1m = 38;
     string census_2011_area = 39;           // The 2011 Census OAs in GB and SAs in Northern Ireland were based on 2001 Census OAs, and they form the building bricks for defining higher level geographies. Pseudo codes are included for Channel Islands and Isle of Man. The field will otherwise be blank for postcodes with no grid reference.
     string census_2011_lsoa = 40;
