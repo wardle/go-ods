@@ -2,6 +2,7 @@ package trud_test
 
 import (
 	"github.com/wardle/go-ods/trud"
+	"strings"
 	"testing"
 )
 
@@ -47,7 +48,22 @@ func TestWalkZip(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if wf.Path == "test.zip/z2/z2.zip/z4.zip/z4f1" {
+		if strings.HasSuffix(wf.Path, "test.zip/z2/z2.zip/z4.zip/z4f1") {
+			found = true
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !found {
+		t.Error("did not find file z4f1 in nested zip!")
+	}
+}
+func TestWalkDirAndZip(t *testing.T) {
+	found := false
+	err := trud.Walk("./", func(wf *trud.WalkedFile, err error) error {
+		if strings.HasSuffix(wf.Path, "test.zip/z2/z2.zip/z4.zip/z4f1") {
 			found = true
 		}
 		return nil

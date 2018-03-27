@@ -34,7 +34,7 @@ func (wf *WalkedFile) Open() (io.ReadCloser, error) {
 func Walk(root string, walkFunc func(wf *WalkedFile, err error) error) error {
 	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		walkedFile := WalkedFile{}
-		walkedFile.Path = root
+		walkedFile.Path = path
 		walkedFile.Info = info
 		if err != nil {
 			return walkFunc(&walkedFile, err)
