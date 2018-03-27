@@ -76,3 +76,12 @@ message NHSPD {
     string census_2011_lsoa = 40;
     string census_2011_msoa = 41;
 }
+
+message Postcode {
+    string postcode=1;
+}
+
+
+service Trud {
+    rpc GetPostcode (Postcode) returns (NHSPD);
+}
