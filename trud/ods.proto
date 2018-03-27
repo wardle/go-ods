@@ -77,11 +77,37 @@ message NHSPD {
     string census_2011_msoa = 41;
 }
 
-message Postcode {
+message ODSOrganisation {
+    string organisation_code=1;
+    string name=2;
+    string national_grouping=3;
+    string high_level_health_geography=4;
+    string address1=5;
+    string address2=6;
+    string address3=7;
+    string address4=8;
+    string address5=9;
+    string postcode=10;
+    string open_date=11;
+    string close_date=12;
+    reserved 13 to 17;
+    string telephone_number=18;
+    reserved 19 to 21;
+    bool amended_record_indicator=22;
+    reserved 23 to 27;
+}
+
+message SearchPostcode {
     string postcode=1;
+}
+message SearchOrganisation {
+    string organisation_code=1;
+    string name=2;
 }
 
 
+
 service Trud {
-    rpc GetPostcode (Postcode) returns (NHSPD);
+    rpc GetPostcode (SearchPostcode) returns (NHSPD);
+    rpc GetOrganisation (SearchOrganisation) returns (ODSOrganisation);
 }
